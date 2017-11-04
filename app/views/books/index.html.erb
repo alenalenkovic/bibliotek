@@ -1,0 +1,63 @@
+<p id="notice"><%= notice %></p>
+
+<div class='header'>
+  <div class='logo'>bibliotek.</div>
+  <div class='return'>Return books anytime, from anywhere</div>
+</div>
+
+<br>
+
+<div class='description'>
+  <div class='rent'>RENT MY LIBRARY</div>
+  <br><br><br>
+  <div class='subrent'>$10/book. All lightly used with no notes or highlighting.</div>
+</div>
+
+<br>
+
+<div class='centerlist'>
+  <ul class ='list'>
+    <% @books.each do |book| %>
+      <li>
+        
+          <%= image_tag book.image %>
+
+        <% if current_member && current_member.admin? == false %>
+          <div class='review'>
+            <%= book.review %>
+          </div>
+        <% elsif !current_member %>
+          <div class='review'>
+            <%= book.review %>
+          </div>
+        <% end %>
+  
+        <br>
+        
+        <% if current_member && current_member.admin? %>
+          <%= link_to 'Show', book %>
+          <%= link_to 'Edit', edit_book_path(book) %>
+          <%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% end %>
+
+        <br>
+
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<br>
+
+<% if current_member && current_member.admin? %>
+  <%= link_to 'New Book', new_book_path %>
+<% end %>
+
+<br>
+
+<% if member_signed_in? %>
+  <%= link_to "Sign Out", destroy_member_session_path, method: :delete, data: { confirm: 'Are you sure?' } %>
+<% else %>
+  <%= link_to "Sign up now!", new_member_registration_path %>
+  <%= link_to "Sign In", new_member_session_path %>
+<% end %>
